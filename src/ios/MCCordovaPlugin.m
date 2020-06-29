@@ -157,7 +157,7 @@ const int LOG_LENGTH = 800;
                 [@"com.salesforce.marketingcloud.manual_request_permission"]
             boolValue];
             if (!manualRequestPermission) {
-                [self requestPushPermission];
+                [self requestPushPermissionInternal];
             }
         } else if (configError != nil) {
             os_log_debug(OS_LOG_DEFAULT, "%@", configError);
@@ -249,7 +249,7 @@ const int LOG_LENGTH = 800;
                                 });
                             } else if (error != nil) {
                                 os_log_debug(OS_LOG_DEFAULT, "%@", error);
-                                [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_] callbackId:command.callbackId];
+                                [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR] callbackId:command.callbackId];
                             }
                           }];
     } else {
@@ -260,7 +260,37 @@ const int LOG_LENGTH = 800;
         [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
         [[UIApplication sharedApplication] registerForRemoteNotifications];
     }
-    
+}
+
+- (void)requestPushPermissionInternal {
+    if (@available(iOS 10, *)) {
+        [[UNUserNotificationCenter currentNotificationCenter]
+            requestAuthorizationWithOptions:UNAuthorizationOptionAlert |
+                                            UNAuthorizationOptionSound | UNAuthorizationOptionBadge
+                          completionHandler:^(BOOL granted, NSError *_Nullable error) {
+                            if (granted) {
+                                os_log_info(OS_LOG_DEFAULT, "Authorized for notifications = %s",
+                                            granted ? "YES" : "NO");
+
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                  // we are authorized to use
+                                  // notifications, request a device
+                                  // token for remote notifications
+                                  [[UIApplication sharedApplication]
+                                      registerForRemoteNotifications];
+                                });
+                            } else if (error != nil) {
+                                os_log_debug(OS_LOG_DEFAULT, "%@", error);
+                            }
+                          }];
+    } else {
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings
+            settingsForTypes:UIUserNotificationTypeBadge | UIUserNotificationTypeSound |
+                             UIUserNotificationTypeAlert
+                  categories:nil];
+        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+        [[UIApplication sharedApplication] registerForRemoteNotifications];
+    }
 }
 
 - (void)enableVerboseLogging:(CDVInvokedUrlCommand *)command {
