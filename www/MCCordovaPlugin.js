@@ -67,6 +67,16 @@ function _exec(successCallback, errorCallback, methodName, args) {
  */
 var MCCordovaPlugin = {
     /**
+     * Request push notification permissions modal alert.
+     * 
+     * @param  {function} [successCallback]
+     * @param  {function} [errorCallback]
+     */
+    requestPushPermission: function(successCallback, errorCallback = undefined) {
+        argsCheck.checkArgs('fF', `${PLUGIN_NAME}.requestPushPermission`, arguments);
+        _exec(successCallback, errorCallback, 'requestPushPermission');
+    },
+    /**
      * The current state of the pushEnabled flag in the native Marketing Cloud
      * SDK.
      * @param  {function(enabled)} successCallback

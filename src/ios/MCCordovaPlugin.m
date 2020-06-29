@@ -152,7 +152,13 @@ const int LOG_LENGTH = 800;
             [self setDelegate];
             [[MarketingCloudSDK sharedInstance] sfmc_setURLHandlingDelegate:self];
             [[MarketingCloudSDK sharedInstance] sfmc_addTag:@"Cordova"];
-            [self requestPushPermission];
+
+            BOOL manualRequestPermission = [pluginSettings
+                [@"com.salesforce.marketingcloud.manual_request_permission"]
+            boolValue];
+            if (!manualRequestPermission) {
+                [self requestPushPermission];
+            }
         } else if (configError != nil) {
             os_log_debug(OS_LOG_DEFAULT, "%@", configError);
             if (configError.code == configureInvalidAppEndpointError) {
@@ -222,7 +228,7 @@ const int LOG_LENGTH = 800;
 #pragma clang diagnostic pop
 }
 
-- (void)requestPushPermission {
+- (void)requestPushPermission:(CDVInvokedUrlCommand *)command {
     if (@available(iOS 10, *)) {
         [[UNUserNotificationCenter currentNotificationCenter]
             requestAuthorizationWithOptions:UNAuthorizationOptionAlert |
@@ -238,9 +244,12 @@ const int LOG_LENGTH = 800;
                                   // token for remote notifications
                                   [[UIApplication sharedApplication]
                                       registerForRemoteNotifications];
+
+                                    [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_OK] callbackId:command.callbackId];
                                 });
                             } else if (error != nil) {
                                 os_log_debug(OS_LOG_DEFAULT, "%@", error);
+                                [self.commandDelegate sendPluginResult:[CDVPluginResult resultWithStatus:CDVCommandStatus_] callbackId:command.callbackId];
                             }
                           }];
     } else {
@@ -251,6 +260,7 @@ const int LOG_LENGTH = 800;
         [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
         [[UIApplication sharedApplication] registerForRemoteNotifications];
     }
+    
 }
 
 - (void)enableVerboseLogging:(CDVInvokedUrlCommand *)command {
