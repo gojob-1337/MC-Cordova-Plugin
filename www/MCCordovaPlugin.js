@@ -67,6 +67,16 @@ function _exec(successCallback, errorCallback, methodName, args) {
  */
 var MCCordovaPlugin = {
     /**
+     * Retrieve push notification status on ios notification center.
+     * 
+     * @param  {function} [successCallback]
+     * @param  {function} [errorCallback]
+     */
+    getNotificationStatus: function(successCallback, errorCallback = undefined) {
+        argsCheck.checkArgs('fF', `${PLUGIN_NAME}.getNotificationStatus`, arguments);
+        _exec(successCallback, errorCallback, 'getNotificationStatus');
+    },
+    /**
      * Request push notification permissions modal alert.
      * 
      * @param  {function} [successCallback]

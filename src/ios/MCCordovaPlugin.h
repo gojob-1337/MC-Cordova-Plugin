@@ -41,6 +41,7 @@
 - (void)enablePush:(CDVInvokedUrlCommand *)command;
 - (void)disablePush:(CDVInvokedUrlCommand *)command;
 - (void)requestPushPermission:(CDVInvokedUrlCommand *)command;
+- (void) getNotificationStatus: (CDVInvokedUrlCommand*) command;
 
 - (void)setAttribute:(CDVInvokedUrlCommand *)command;
 - (void)clearAttribute:(CDVInvokedUrlCommand *)command;
