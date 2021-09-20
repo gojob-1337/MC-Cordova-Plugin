@@ -1,6 +1,6 @@
 {
   "name": "@gojob/cordova-plugin-marketingcloudsdk",
-  "version": "7.4.1",
+  "version": "7.4.11",
   "description": "A Cordova Plugin to access the native Salesforce Marketing Cloud MobilePush SDKs",
   "author": "Salesforce Marketing Cloud",
   "license": "BSD-3-Clause",
