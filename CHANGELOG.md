@@ -1,5 +1,14 @@
 Change Log
 ==========
+### Version 7.4.1
+* Updated to the 7.4.x versions of the Android and iOS Marketing Cloud SDK.
+* Fix for removing un necessary Logcat statements on newIntent() flow in Android
+
+### Version 7.4.0
+* Updated to the 7.4.x version of the iOS Marketing Cloud SDK.
+
+### Version 7.3.0
+* Updated to the 7.3.x versions of the Android and iOS Marketing Cloud SDK.
 
 ### Version 7.2.0
 * Updated to the 7.2.x versions of the Android and iOS Marketing Cloud SDK.
